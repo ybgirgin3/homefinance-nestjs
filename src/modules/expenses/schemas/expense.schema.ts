@@ -14,9 +14,6 @@ export class Expense {
   @Prop()
   case: string;
 
-  @Prop()
-  price: number;
-
   @Prop({ type: Date, default: Date.now })
   createdAt: number;
 
