@@ -1,31 +1,27 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 
-import { User } from '../../user/entities/user.entity';
+export type ExpenseDocument = HydratedDocument<Expense>;
 
 @Schema()
-export class Expense extends Document {
-  @Prop({
-    type: MongooseSchema.Types.ObjectId,
-    required: false,
-    ref: User.name,
-  })
-  user: MongooseSchema.Types.ObjectId;
+export class Expense {
+  @Prop()
+  product: string;
 
-  @Prop({ type: String })
-  productName: string;
+  @Prop()
+  user: string;
 
-  @Prop({ type: String })
+  @Prop()
   case: string;
 
-  @Prop({ type: Number })
+  @Prop()
   price: number;
 
   @Prop({ type: Date, default: Date.now })
-  createdAt: Date;
+  createdAt: number;
 
   @Prop({ type: Date, default: Date.now })
-  updatedAt: Date;
+  updatedAt: number;
 }
 
 export const ExpenseSchema = SchemaFactory.createForClass(Expense);

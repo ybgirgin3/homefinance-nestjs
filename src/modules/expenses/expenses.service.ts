@@ -1,31 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { CreateExpenseDto } from './dto/create-expense.dto';
-import { DeleteExpenseDto } from './dto/delete-expense.dto';
+import { Expense } from './schemas/expense.schema';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class ExpensesService {
-  findAllService(params: object) {
-    return `This action returns all expenses with params: ${Object.values(
-      params,
-    )}`;
+  constructor(
+    @InjectModel(Expense.name) private readonly expenseModel: Model<Expense>,
+  ) {}
+
+  async create(createExpenseDto: CreateExpenseDto): Promise<Expense> {
+    return await this.expenseModel.create(createExpenseDto);
   }
 
-  createService(createExpenseDto: CreateExpenseDto) {
-    // i can get object data with req too
-    // return 'This action adds a new expense';
-    return createExpenseDto;
+  async findAll(): Promise<Expense[]> {
+    return this.expenseModel.find().exec();
   }
 
-  updateService(data: CreateExpenseDto) {
-    const newData = data;
-    // newData['updatedAt'] = new Date().toString();
-    return {
-      old: data,
-      new: newData,
-    };
+  async findOne(id: string): Promise<Expense> {
+    return this.expenseModel.findOne({ _id: id }).exec();
   }
 
-  deleteService(deleteExpenseDto: DeleteExpenseDto) {
-    return deleteExpenseDto;
+  async delete(id: string) {
+    return await this.expenseModel.findByIdAndRemove({ _id: id }).exec();
   }
 }
