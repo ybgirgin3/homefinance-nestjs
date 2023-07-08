@@ -1,7 +1,8 @@
 export class CreateExpenseDto {
   product: string;
-  owner: string;
+  user: string;
   case: string;
   price: number;
-  date: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
