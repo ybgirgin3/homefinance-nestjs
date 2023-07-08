@@ -1,18 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type ExpenseDocument = HydratedDocument<Expense>;
+export type UserDocument = HydratedDocument<User>;
 
 @Schema()
-export class Expense {
+export class User {
   @Prop()
-  product: string;
+  name: string;
 
   @Prop()
-  user: string;
-
-  @Prop()
-  case: string;
+  email: string;
 
   @Prop({ type: Date, default: Date.now })
   createdAt: number;
@@ -21,4 +18,4 @@ export class Expense {
   updatedAt: number;
 }
 
-export const ExpenseSchema = SchemaFactory.createForClass(Expense);
+export const UserSchema = SchemaFactory.createForClass(User);
