@@ -5,6 +5,7 @@ import { ConfigModule } from './config/config.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from './config/config.service';
 import { ExpensesModule } from './modules/expenses/expenses.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ExpensesModule } from './modules/expenses/expenses.module';
       useFactory: async (configService: ConfigService) =>
         configService.getMongoConfig(),
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
