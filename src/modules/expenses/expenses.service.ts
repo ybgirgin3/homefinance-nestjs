@@ -11,7 +11,19 @@ export class ExpensesService {
   ) {}
 
   async create(createExpenseDto: CreateExpenseDto): Promise<Expense> {
-    return await this.expenseModel.create(createExpenseDto);
+    const isExists = await this.expenseModel
+      .findOne({
+        case: createExpenseDto.case,
+        product: createExpenseDto.product,
+      })
+      .lean();
+
+    if (isExists) {
+      console.log('Data exists', isExists);
+      return isExists;
+    } else {
+      return await this.expenseModel.create(createExpenseDto);
+    }
   }
 
   async findAll(): Promise<Expense[]> {
