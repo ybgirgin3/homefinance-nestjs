@@ -9,17 +9,74 @@ export class ExpensesController {
 
   @Post()
   async create(@Body() createExpenseDto: CreateExpenseDto) {
-    await this.expenseService.create(createExpenseDto);
+    try {
+      // if data already exist
+      const isExists = this.findOne({
+        purchase_case: createExpenseDto.purchase_case,
+        product: createExpenseDto.product,
+      });
+      if (isExists) {
+        return {
+          status: 409,
+          message: 'Data Already Exist',
+          response: isExists,
+        };
+      }
+      const data = await this.expenseService.create(createExpenseDto);
+      return {
+        status: 201,
+        message: 'Expense Created',
+        response: data,
+      };
+    } catch {
+      return {
+        status: 403,
+        message: 'Forbidden',
+        response: [],
+      };
+    }
   }
 
   @Get()
-  async findAll(): Promise<Expense[]> {
-    return this.expenseService.findAll();
+  async findAll() {
+    try {
+      const data = await this.expenseService.findAll();
+      return {
+        status: 200,
+        message: 'Expense Found',
+        response: data,
+      };
+    } catch {
+      return {
+        status: 404,
+        message: 'Not Found',
+        response: [],
+      };
+    }
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Expense> {
-    return this.expenseService.findOne(id);
+  async findOne(d: object) {
+    try {
+      const data = await this.expenseService.findOne(
+        // @ts-ignore
+        d.purchase_case,
+
+        // @ts-ignore
+        d.product,
+      );
+      return {
+        status: 200,
+        message: 'Expense Found',
+        response: data,
+      };
+    } catch {
+      return {
+        status: 404,
+        message: 'Not Found',
+        response: [],
+      };
+    }
   }
 
   @Delete(':id')

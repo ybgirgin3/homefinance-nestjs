@@ -11,27 +11,17 @@ export class ExpensesService {
   ) {}
 
   async create(createExpenseDto: CreateExpenseDto): Promise<Expense> {
-    const isExists = await this.expenseModel
-      .findOne({
-        purchase_case: createExpenseDto.purchase_case,
-        product: createExpenseDto.product,
-      })
-      .lean();
-
-    if (isExists) {
-      console.log('Data exists', isExists);
-      return isExists;
-    } else {
-      return await this.expenseModel.create(createExpenseDto);
-    }
+    return await this.expenseModel.create(createExpenseDto);
   }
 
   async findAll(): Promise<Expense[]> {
     return this.expenseModel.find().exec();
   }
 
-  async findOne(id: string): Promise<Expense> {
-    return this.expenseModel.findOne({ _id: id }).exec();
+  async findOne(purchase_case: string, product: string): Promise<Expense> {
+    return this.expenseModel
+      .findOne({ purchase_case: purchase_case, product: product })
+      .exec();
   }
 
   async delete(id: string) {
