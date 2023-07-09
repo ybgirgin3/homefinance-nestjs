@@ -12,7 +12,7 @@ export class Expense {
   user: string;
 
   @Prop()
-  case: string;
+  purchase_case: string;
 
   @Prop()
   price: number;

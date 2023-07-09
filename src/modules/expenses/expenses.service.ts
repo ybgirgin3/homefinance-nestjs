@@ -13,7 +13,7 @@ export class ExpensesService {
   async create(createExpenseDto: CreateExpenseDto): Promise<Expense> {
     const isExists = await this.expenseModel
       .findOne({
-        case: createExpenseDto.case,
+        purchase_case: createExpenseDto.purchase_case,
         product: createExpenseDto.product,
       })
       .lean();
