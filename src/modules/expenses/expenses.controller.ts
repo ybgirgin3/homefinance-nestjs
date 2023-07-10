@@ -43,7 +43,7 @@ export class ExpensesController {
       const data = await this.expenseService.findAll();
       return {
         status: 200,
-        message: 'Expense Found',
+        message: 'Expense(s) Found',
         response: data,
       };
     } catch {
@@ -56,19 +56,13 @@ export class ExpensesController {
   }
 
   @Get(':id')
-  async findOne(d: object) {
+  async findOne(@Param('id') id: string) {
     try {
-      const data = await this.expenseService.findOne(
-        // @ts-ignore
-        d.purchase_case,
-
-        // @ts-ignore
-        d.product,
-      );
+      const expense = this.expenseService.findOne(id);
       return {
         status: 200,
         message: 'Expense Found',
-        response: data,
+        response: expense,
       };
     } catch {
       return {

@@ -18,10 +18,8 @@ export class ExpensesService {
     return this.expenseModel.find().exec();
   }
 
-  async findOne(purchase_case: string, product: string): Promise<Expense> {
-    return this.expenseModel
-      .findOne({ purchase_case: purchase_case, product: product })
-      .exec();
+  async findOne(id: string): Promise<Expense> {
+    return this.expenseModel.findOne({ _id: id }).exec();
   }
 
   async delete(id: string) {
