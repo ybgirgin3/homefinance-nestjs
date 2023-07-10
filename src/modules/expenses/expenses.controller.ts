@@ -10,12 +10,10 @@ export class ExpensesController {
   @Post()
   async create(@Body() createExpenseDto: CreateExpenseDto) {
     try {
-      const data = await this.expenseService.create(createExpenseDto);
-      return {
-        status: 201,
-        message: 'Expense Created',
-        response: data,
-      };
+      const service_response: object = await this.expenseService.create(
+        createExpenseDto,
+      );
+      return service_response;
     } catch {
       return {
         status: 403,
