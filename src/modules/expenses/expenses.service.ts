@@ -10,19 +10,30 @@ export class ExpensesService {
     @InjectModel(Expense.name) private readonly expenseModel: Model<Expense>,
   ) {}
 
-  async create(createExpenseDto: CreateExpenseDto): Promise<Expense> {
+  async create(createExpenseDto: CreateExpenseDto) {
     const isExists = await this.expenseModel
       .findOne({
-        purchase_case: createExpenseDto.purchase_case,
         product: createExpenseDto.product,
+        user: createExpenseDto.user,
+        purchase_case: createExpenseDto.purchase_case,
+        price: createExpenseDto.price,
+        createdAt: createExpenseDto.createdAt,
+        updatedAt: createExpenseDto.updatedAt,
       })
       .lean();
 
     if (isExists) {
-      console.log('Data exists', isExists);
-      return isExists;
+      return {
+        status: 409,
+        message: 'Data Already Exists',
+        response: createExpenseDto,
+      };
     } else {
-      return await this.expenseModel.create(createExpenseDto);
+      return {
+        status: 201,
+        message: 'Data Created',
+        response: await this.expenseModel.create(createExpenseDto),
+      };
     }
   }
 
