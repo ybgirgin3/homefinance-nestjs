@@ -10,18 +10,6 @@ export class ExpensesController {
   @Post()
   async create(@Body() createExpenseDto: CreateExpenseDto) {
     try {
-      // if data already exist
-      const isExists = this.findOne({
-        purchase_case: createExpenseDto.purchase_case,
-        product: createExpenseDto.product,
-      });
-      if (isExists) {
-        return {
-          status: 409,
-          message: 'Data Already Exist',
-          response: isExists,
-        };
-      }
       const data = await this.expenseService.create(createExpenseDto);
       return {
         status: 201,
