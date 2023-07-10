@@ -17,8 +17,6 @@ export class ExpensesService {
         user: createExpenseDto.user,
         purchase_case: createExpenseDto.purchase_case,
         price: createExpenseDto.price,
-        createdAt: createExpenseDto.createdAt,
-        updatedAt: createExpenseDto.updatedAt,
       })
       .lean();
 
