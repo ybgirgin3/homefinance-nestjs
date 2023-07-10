@@ -15,6 +15,9 @@ export class Expense {
   purchase_case: string;
 
   @Prop()
+  quantity: number;
+
+  @Prop()
   price: number;
 
   @Prop({ type: Date, default: Date.now })
