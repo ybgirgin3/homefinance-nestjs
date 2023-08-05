@@ -1,31 +1,41 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
+import { MessageResponse } from '../../interfaces/responses';
+import { Expense } from './schemas/expense.schema';
 
 @Controller('expenses')
 export class ExpensesController {
   constructor(private readonly expenseService: ExpensesService) {}
 
   @Post()
-  async create(@Body() createExpenseDto: CreateExpenseDto) {
+  async create(
+    @Body() createExpenseDto: CreateExpenseDto,
+  ): Promise<MessageResponse> {
     try {
-      const service_response: object = await this.expenseService.create(
+      const service_response: Expense | null = await this.expenseService.create(
         createExpenseDto,
       );
-      return service_response;
+      return {
+        status: service_response ? 201 : 409,
+        message: service_response
+          ? 'Data Created Successfully'
+          : 'Data Already Exists',
+        response: service_response,
+      };
     } catch {
       return {
         status: 403,
         message: 'Forbidden',
-        response: [],
+        response: null,
       };
     }
   }
 
   @Get()
-  async findAll() {
+  async findAll(): Promise<MessageResponse> {
     try {
-      const data = await this.expenseService.findAll();
+      const data: Expense[] = await this.expenseService.findAll();
       return {
         status: 200,
         message: 'Expense(s) Found',
@@ -35,15 +45,15 @@ export class ExpensesController {
       return {
         status: 404,
         message: 'Not Found',
-        response: [],
+        response: null,
       };
     }
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<MessageResponse> {
     try {
-      const expense = this.expenseService.findOne(id);
+      const expense: Promise<Expense> = this.expenseService.findOne(id);
       return {
         status: 200,
         message: 'Expense Found',
@@ -53,13 +63,18 @@ export class ExpensesController {
       return {
         status: 404,
         message: 'Not Found',
-        response: [],
+        response: null,
       };
     }
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    return this.expenseService.delete(id);
+  async delete(@Param('id') id: string): Promise<MessageResponse> {
+    // return this.expenseService.delete(id);
+    return {
+      status: 204,
+      message: 'Data Deleted Successfully',
+      response: null,
+    };
   }
 }

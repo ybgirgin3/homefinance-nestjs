@@ -10,7 +10,7 @@ export class ExpensesService {
     @InjectModel(Expense.name) private readonly expenseModel: Model<Expense>,
   ) {}
 
-  async create(createExpenseDto: CreateExpenseDto) {
+  async create(createExpenseDto: CreateExpenseDto): Promise<Expense> {
     const isExists = await this.expenseModel
       .findOne({
         product: createExpenseDto.product,
@@ -21,17 +21,9 @@ export class ExpensesService {
       .lean();
 
     if (isExists) {
-      return {
-        status: 409,
-        message: 'Data Already Exists',
-        response: createExpenseDto,
-      };
+      return null;
     } else {
-      return {
-        status: 201,
-        message: 'Data Created',
-        response: await this.expenseModel.create(createExpenseDto),
-      };
+      return this.expenseModel.create(createExpenseDto);
     }
   }
 
@@ -43,7 +35,7 @@ export class ExpensesService {
     return this.expenseModel.findOne({ _id: id }).exec();
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<Expense> {
     return await this.expenseModel.findByIdAndRemove({ _id: id }).exec();
   }
 }
