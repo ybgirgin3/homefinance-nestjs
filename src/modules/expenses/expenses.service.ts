@@ -48,6 +48,7 @@ export class ExpensesService {
     return this.expenseModel.findOneAndUpdate(
       { _id: new ObjectId(id) },
       { $set: updateExpenseDto },
+      { returnDocument: 'after' },
     );
   }
 
