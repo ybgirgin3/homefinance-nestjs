@@ -3,6 +3,9 @@ import { CreateExpenseDto } from './dto/create-expense.dto';
 import { Expense } from './schemas/expense.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { UpdateExpenseDto } from './dto/update-expense.dto';
+
+import { ObjectId } from 'bson';
 
 @Injectable()
 export class ExpensesService {
@@ -33,6 +36,19 @@ export class ExpensesService {
 
   async findOne(id: string): Promise<Expense> {
     return this.expenseModel.findOne({ _id: id }).exec();
+  }
+
+  async findOneAndUpdate(
+    id: string,
+    updateExpenseDto: UpdateExpenseDto,
+  ): Promise<Expense> {
+    // update `UpdatedAt` element
+    updateExpenseDto['updatedAt'] = Date.now().toString();
+
+    return this.expenseModel.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: updateExpenseDto },
+    );
   }
 
   async delete(id: string): Promise<Expense> {
