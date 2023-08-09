@@ -22,15 +22,15 @@ export class ExpensesController {
     @Body() createExpenseDto: CreateExpenseDto,
   ): Promise<MessageResponse> {
     try {
-      const service_response: Expense | null = await this.expenseService.create(
+      const serviceResponse: Expense | null = await this.expenseService.create(
         createExpenseDto,
       );
       return {
-        status: service_response ? 201 : 409,
-        message: service_response
+        status: serviceResponse ? 201 : 409,
+        message: serviceResponse
           ? 'Data Created Successfully'
           : 'Data Already Exists',
-        response: service_response,
+        response: serviceResponse,
       };
     } catch {
       return {
@@ -83,10 +83,8 @@ export class ExpensesController {
     @Body() updateExpenseDto: UpdateExpenseDto,
   ): Promise<MessageResponse> {
     try {
-      const responseFromModel = await this.expenseService.findOneAndUpdate(
-        id,
-        updateExpenseDto,
-      );
+      const responseFromModel: Expense =
+        await this.expenseService.findOneAndUpdate(id, updateExpenseDto);
       return {
         status: 204,
         message: 'Data Updated Successfully',
