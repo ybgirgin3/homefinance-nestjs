@@ -4,6 +4,6 @@ export class CreateExpenseDto {
   purchase_case: string;
   quantity: number;
   price: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
