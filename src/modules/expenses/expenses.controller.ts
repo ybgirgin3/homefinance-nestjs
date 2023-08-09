@@ -1,8 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { MessageResponse } from '../../interfaces/responses';
 import { Expense } from './schemas/expense.schema';
+import { UpdateExpenseDto } from './dto/update-expense.dto';
 
 @Controller('expenses')
 export class ExpensesController {
@@ -64,6 +73,30 @@ export class ExpensesController {
         status: 404,
         message: 'Not Found',
         response: null,
+      };
+    }
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateExpenseDto: UpdateExpenseDto,
+  ): Promise<MessageResponse> {
+    try {
+      const responseFromModel = await this.expenseService.findOneAndUpdate(
+        id,
+        updateExpenseDto,
+      );
+      return {
+        status: 204,
+        message: 'Data Updated Successfully',
+        response: responseFromModel,
+      };
+    } catch (e) {
+      return {
+        status: 404,
+        message: 'Not Found',
+        response: [],
       };
     }
   }
